@@ -91,7 +91,7 @@
             // 
             label_Leaderboard.AutoSize = true;
             label_Leaderboard.Enabled = false;
-            label_Leaderboard.Location = new Point(239, 6);
+            label_Leaderboard.Location = new Point(318, 6);
             label_Leaderboard.Name = "label_Leaderboard";
             label_Leaderboard.Size = new Size(73, 15);
             label_Leaderboard.TabIndex = 3;
@@ -129,7 +129,7 @@
             richTextBox_Log.Margin = new Padding(3, 2, 3, 2);
             richTextBox_Log.Name = "richTextBox_Log";
             richTextBox_Log.ReadOnly = true;
-            richTextBox_Log.Size = new Size(207, 207);
+            richTextBox_Log.Size = new Size(286, 207);
             richTextBox_Log.TabIndex = 7;
             richTextBox_Log.Text = "";
             // 
@@ -137,7 +137,7 @@
             // 
             dataGridView_Leaderboard.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView_Leaderboard.Enabled = false;
-            dataGridView_Leaderboard.Location = new Point(239, 23);
+            dataGridView_Leaderboard.Location = new Point(318, 23);
             dataGridView_Leaderboard.Margin = new Padding(3, 2, 3, 2);
             dataGridView_Leaderboard.Name = "dataGridView_Leaderboard";
             dataGridView_Leaderboard.RowHeadersWidth = 51;
@@ -165,6 +165,7 @@
             btn_Join.TabIndex = 10;
             btn_Join.Text = "Join";
             btn_Join.UseVisualStyleBackColor = true;
+            btn_Join.Click += btn_Join_Click;
             // 
             // btn_Queue
             // 
@@ -185,6 +186,7 @@
             btn_Dissconnect.TabIndex = 12;
             btn_Dissconnect.Text = "Leave";
             btn_Dissconnect.UseVisualStyleBackColor = true;
+            btn_Dissconnect.Click += btn_Dissconnect_Click;
             // 
             // label_Notification
             // 
@@ -192,7 +194,7 @@
             label_Notification.Name = "label_Notification";
             label_Notification.Size = new Size(207, 48);
             label_Notification.TabIndex = 13;
-            label_Notification.Text = "PLEASE CONNECT TO A SERVER";
+            label_Notification.Text = "PLEASE CONNECT TO THE SERVER";
             label_Notification.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // btn_00
@@ -200,7 +202,7 @@
             btn_00.Enabled = false;
             btn_00.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Regular, GraphicsUnit.Point);
             btn_00.ForeColor = SystemColors.ControlText;
-            btn_00.Location = new Point(239, 108);
+            btn_00.Location = new Point(318, 108);
             btn_00.Name = "btn_00";
             btn_00.Size = new Size(100, 92);
             btn_00.TabIndex = 14;
@@ -212,7 +214,7 @@
             btn_01.Enabled = false;
             btn_01.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Regular, GraphicsUnit.Point);
             btn_01.ForeColor = SystemColors.ControlText;
-            btn_01.Location = new Point(345, 108);
+            btn_01.Location = new Point(424, 108);
             btn_01.Name = "btn_01";
             btn_01.Size = new Size(100, 92);
             btn_01.TabIndex = 15;
@@ -224,7 +226,7 @@
             btn_02.Enabled = false;
             btn_02.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Regular, GraphicsUnit.Point);
             btn_02.ForeColor = SystemColors.ControlText;
-            btn_02.Location = new Point(451, 109);
+            btn_02.Location = new Point(530, 109);
             btn_02.Name = "btn_02";
             btn_02.Size = new Size(100, 92);
             btn_02.TabIndex = 16;
@@ -236,7 +238,7 @@
             btn_10.Enabled = false;
             btn_10.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Regular, GraphicsUnit.Point);
             btn_10.ForeColor = SystemColors.ControlText;
-            btn_10.Location = new Point(239, 204);
+            btn_10.Location = new Point(318, 204);
             btn_10.Name = "btn_10";
             btn_10.Size = new Size(100, 92);
             btn_10.TabIndex = 17;
@@ -248,7 +250,7 @@
             btn_11.Enabled = false;
             btn_11.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Regular, GraphicsUnit.Point);
             btn_11.ForeColor = SystemColors.ControlText;
-            btn_11.Location = new Point(345, 204);
+            btn_11.Location = new Point(424, 204);
             btn_11.Name = "btn_11";
             btn_11.Size = new Size(100, 92);
             btn_11.TabIndex = 18;
@@ -260,7 +262,7 @@
             btn_12.Enabled = false;
             btn_12.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Regular, GraphicsUnit.Point);
             btn_12.ForeColor = SystemColors.ControlText;
-            btn_12.Location = new Point(451, 204);
+            btn_12.Location = new Point(530, 204);
             btn_12.Name = "btn_12";
             btn_12.Size = new Size(100, 92);
             btn_12.TabIndex = 19;
@@ -272,7 +274,7 @@
             btn_20.Enabled = false;
             btn_20.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Regular, GraphicsUnit.Point);
             btn_20.ForeColor = SystemColors.ControlText;
-            btn_20.Location = new Point(239, 300);
+            btn_20.Location = new Point(318, 300);
             btn_20.Name = "btn_20";
             btn_20.Size = new Size(100, 92);
             btn_20.TabIndex = 20;
@@ -284,7 +286,7 @@
             btn_21.Enabled = false;
             btn_21.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Regular, GraphicsUnit.Point);
             btn_21.ForeColor = SystemColors.ControlText;
-            btn_21.Location = new Point(345, 300);
+            btn_21.Location = new Point(424, 300);
             btn_21.Name = "btn_21";
             btn_21.Size = new Size(100, 92);
             btn_21.TabIndex = 21;
@@ -296,7 +298,7 @@
             btn_22.Enabled = false;
             btn_22.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Regular, GraphicsUnit.Point);
             btn_22.ForeColor = SystemColors.ControlText;
-            btn_22.Location = new Point(451, 300);
+            btn_22.Location = new Point(530, 300);
             btn_22.Name = "btn_22";
             btn_22.Size = new Size(100, 92);
             btn_22.TabIndex = 22;
@@ -306,7 +308,7 @@
             // label_currentPlayer1
             // 
             label_currentPlayer1.Enabled = false;
-            label_currentPlayer1.Location = new Point(239, 90);
+            label_currentPlayer1.Location = new Point(318, 90);
             label_currentPlayer1.Name = "label_currentPlayer1";
             label_currentPlayer1.Size = new Size(100, 15);
             label_currentPlayer1.TabIndex = 23;
@@ -316,7 +318,7 @@
             // label_currentPlayer2
             // 
             label_currentPlayer2.Enabled = false;
-            label_currentPlayer2.Location = new Point(451, 90);
+            label_currentPlayer2.Location = new Point(530, 90);
             label_currentPlayer2.Name = "label_currentPlayer2";
             label_currentPlayer2.RightToLeft = RightToLeft.No;
             label_currentPlayer2.Size = new Size(100, 16);
@@ -327,7 +329,7 @@
             // label_CurrentGame
             // 
             label_CurrentGame.Enabled = false;
-            label_CurrentGame.Location = new Point(345, 90);
+            label_CurrentGame.Location = new Point(424, 90);
             label_CurrentGame.Name = "label_CurrentGame";
             label_CurrentGame.Size = new Size(100, 15);
             label_CurrentGame.TabIndex = 25;
@@ -338,7 +340,7 @@
             // 
             btn_splitter.BackColor = SystemColors.ActiveBorder;
             btn_splitter.Enabled = false;
-            btn_splitter.Location = new Point(223, 8);
+            btn_splitter.Location = new Point(302, 8);
             btn_splitter.Name = "btn_splitter";
             btn_splitter.Size = new Size(10, 384);
             btn_splitter.TabIndex = 26;
@@ -358,7 +360,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(557, 398);
+            ClientSize = new Size(638, 398);
             Controls.Add(btn_Accept);
             Controls.Add(btn_splitter);
             Controls.Add(label_CurrentGame);
