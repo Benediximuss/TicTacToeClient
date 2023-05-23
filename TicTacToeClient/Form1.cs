@@ -33,6 +33,7 @@ namespace TicTacToeClient
 
         private void btn_Connect_Click(object sender, EventArgs e)
         {
+
             clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
             int port;
@@ -47,9 +48,9 @@ namespace TicTacToeClient
                     Thread recieveThread = new Thread(serverListener); // Start Recieve function to recieve message from server
                     recieveThread.Start();
                 }
-                catch
+                catch (Exception exc)
                 {
-                    richTextBox_Log.AppendText("Couldn't connect to the server!\n");
+                    richTextBox_Log.AppendText(" Couldn't connect to the server!\n");
                 }
             }
             else
@@ -81,18 +82,20 @@ namespace TicTacToeClient
 
         private void btn_Dissconnect_Click(object sender, EventArgs e)
         {
-            dissconnectServer();
+            disconnectServer();
+            toggleComponentsEnabled(true, btn_Join, textBox_Name);
+            toggleComponentsEnabled(false, btn_Dissconnect);
         }
 
-        private void dissconnectServer()
+        private void disconnectServer()
         {
-            string msg = (!isJoined) ? "401:Dissconnecting, no username" : ("402:" + username + " dissconnecting");
+            string msg = $"leave:{username}";
             Byte[] buffer_send = Encoding.Default.GetBytes(msg);
 
             try
             {
                 clientSocket.Send(buffer_send);
-                clientSocket.Close();
+                richTextBox_Log.AppendText("You've left the game!\n");
             }
             catch
             {
@@ -104,8 +107,6 @@ namespace TicTacToeClient
         {
             while (clientSocket.Connected)
             {
-                try
-                {
                     string[] token = receiveResponse();
 
                     if (token[0] == "200")
@@ -127,7 +128,7 @@ namespace TicTacToeClient
                     else if (token[0] == "201") // username approved, joined successfully
                     {
                         isJoined = true;
-                        //richTextBox_Log.AppendText(token[1]);
+                        richTextBox_Log.AppendText(token[1]);
 
                         toggleComponentsEnabled(true, btn_Queue, btn_Dissconnect);
                     }
@@ -143,11 +144,7 @@ namespace TicTacToeClient
                     {
                         richTextBox_Log.AppendText(token[1]);
                     }
-                }
-                catch
-                {
-                    richTextBox_Log.AppendText("ERROR 512!\n");
-                }
+             
             }
         }
 
@@ -269,9 +266,11 @@ namespace TicTacToeClient
 
         private void Form1_FormClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (clientSocket.Connected)
+
+            if (clientSocket != null && clientSocket.Connected)
             {
                 clientSocket.Close();
+                clientSocket.Dispose();
             }
 
             Environment.Exit(0);
