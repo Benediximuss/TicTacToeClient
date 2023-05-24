@@ -410,6 +410,8 @@
             Controls.Add(label_Port);
             Controls.Add(label_IP);
             Controls.Add(label_Name);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
             Name = "Form1";
             Text = "TicTacToe Client";
             ((System.ComponentModel.ISupportInitialize)dataGridView_Leaderboard).EndInit();

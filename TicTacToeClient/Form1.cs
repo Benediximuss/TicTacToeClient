@@ -10,8 +10,11 @@ namespace TicTacToeClient
         // Form Components
         List<List<Button>> buttonsMatrix = new List<List<Button>>();
 
-        // Game components
+        // Game information
         string username;
+        char side;
+
+        // Game logic
 
         // Network components comoon
         Socket clientSocket;
@@ -28,11 +31,14 @@ namespace TicTacToeClient
 
             InitializeComponent();
 
-
             // Other initializations
             setInfoText("init");
             initButtonsMatrix();
             DisableBlueHighlight();
+
+            username = "ugurpasa";
+            side = 'X';
+            toggleButtonsEnabled(true);
         }
 
 
@@ -92,7 +98,7 @@ namespace TicTacToeClient
         {
             if (isJoined) // leave room
             {
-                disconnectServer();
+                leaveRoom();
                 toggleComponentsEnabled(true, btn_Join, textBox_Name, btn_Disconnect);
                 toggleComponentsEnabled(false, btn_Queue);
                 btn_Disconnect.Text = "Disconnect";
@@ -133,7 +139,7 @@ namespace TicTacToeClient
         }
 
         // Connection
-        private void disconnectServer()
+        private void leaveRoom()
         {
             string msg = $"leave:{username}";
             Byte[] buffer_send = Encoding.Default.GetBytes(msg);
@@ -141,11 +147,11 @@ namespace TicTacToeClient
             try
             {
                 clientSocket.Send(buffer_send);
-                richTextBox_Log.AppendText("You've left the game!\n");
+                richTextBox_Log.AppendText("You've left the room!\n");
             }
             catch
             {
-                richTextBox_Log.AppendText("Coouldn't dissconnect, try again!\n");
+                richTextBox_Log.AppendText("Coouldn't leave, try again!\n");
             }
         }
 
@@ -190,12 +196,24 @@ namespace TicTacToeClient
                         username = "";
                     }
 
+                    else if (token[0] == "startreq")
+                    {
+                        richTextBox_Log.AppendText(token[2]);
+                        toggleComponentsEnabled(true, btn_Accept);
+                        setInfoText("gamefound");
+                    }
+
+
                     else if (token[0] == "info")
                     {
                         richTextBox_Log.AppendText(token[1]);
                     }
                 }
-                catch { }
+                catch
+                {
+                    richTextBox_Log.AppendText("Lost connection with server!\n");
+                    resetAll();
+                }
             }
         }
 
@@ -207,6 +225,16 @@ namespace TicTacToeClient
             string[] token = response.Trim('\0').Split(':');
             return token;
         }
+
+
+        // Game functions
+        private void buttonPlayed(Button clickedButton)
+        {
+            string coords = clickedButton.Name.Split('_')[1];
+            string msg = $"move:{coords[0]}-{coords[1]}";
+            richTextBox_Log.AppendText(msg);
+        }
+
 
         // Component Functions 
         void toggleComponentsEnabled(bool state, params Control[] components)
@@ -238,7 +266,69 @@ namespace TicTacToeClient
                 label_Notification.Text = "Join the game queue to play a game!";
             else if (state == "waiting")
                 label_Notification.Text = "Waiting for response...";
+            else if (state == "gamefound")
+                label_Notification.Text = $"Found game!\nAccept to start playing as {side}";
+
         }
+
+        private void resetAll()
+        {
+            toggleComponentsEnabled(true, label_IP, label_Port, textBox_IP, textBox_Port, btn_Connect);
+            toggleComponentsEnabled(false, label_Name, textBox_Name, btn_Join, btn_Disconnect, btn_Queue, btn_Accept);
+            setInfoText("init");
+            isJoined = false;
+            username = "";
+        }
+
+        // Initialization
+        private void initButtonsMatrix()
+        {
+            List<Button> row;
+
+            row = new List<Button>();
+            row.Add(btn_00);
+            row.Add(btn_01);
+            row.Add(btn_02);
+            buttonsMatrix.Add(row);
+
+            row = new List<Button>();
+            row.Add(btn_10);
+            row.Add(btn_11);
+            row.Add(btn_12);
+            buttonsMatrix.Add(row);
+
+            row = new List<Button>();
+            row.Add(btn_20);
+            row.Add(btn_21);
+            row.Add(btn_22);
+            buttonsMatrix.Add(row);
+        }
+
+        private void DisableBlueHighlight()
+        {
+            // Disables the blue focus highlight surrounding the buttons, for all buttons
+            foreach (Button button in this.Controls.OfType<Button>())
+            {
+                button.TabStop = false;
+            }
+        }
+
+
+        private void Form1_FormClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+
+            if (clientSocket != null && clientSocket.Connected)
+            {
+                clientSocket.Close();
+                clientSocket.Dispose();
+            }
+
+            Environment.Exit(0);
+        }
+
+
+
+
 
 
         // XOX Buttons
@@ -287,61 +377,5 @@ namespace TicTacToeClient
             buttonPlayed((Button)sender);
         }
 
-        private void buttonPlayed(Button clickedButton)
-        {
-
-        }
-        private void resetAll()
-        {
-
-        }
-
-        // Initialization
-        private void initButtonsMatrix()
-        {
-            List<Button> row;
-
-            row = new List<Button>();
-            row.Add(btn_00);
-            row.Add(btn_01);
-            row.Add(btn_02);
-            buttonsMatrix.Add(row);
-
-            row = new List<Button>();
-            row.Add(btn_10);
-            row.Add(btn_11);
-            row.Add(btn_12);
-            buttonsMatrix.Add(row);
-
-            row = new List<Button>();
-            row.Add(btn_20);
-            row.Add(btn_21);
-            row.Add(btn_22);
-            buttonsMatrix.Add(row);
-        }
-
-        // Disables the blue focus highlight surrounding the buttons, for all buttons
-        private void DisableBlueHighlight()
-        {
-            foreach (Button button in this.Controls.OfType<Button>())
-            {
-                button.TabStop = false;
-            }
-        }
-
-
-        private void Form1_FormClosing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-
-            if (clientSocket != null && clientSocket.Connected)
-            {
-                clientSocket.Close();
-                clientSocket.Dispose();
-            }
-
-            Environment.Exit(0);
-        }
-
-  
     }
 }
