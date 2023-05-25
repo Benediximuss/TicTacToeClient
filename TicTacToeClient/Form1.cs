@@ -40,12 +40,12 @@ namespace TicTacToeClient
             initButtonsMatrix();
             DisableBlueHighlight();
 
-            string ss = "meric";
+            string ss = "ugur";
             if (ss == "meric")
                 textBox_IP.Text = "10.51.18.6";
             else
-                //textBox_IP.Text = "159.20.93.207";
                 textBox_IP.Text = "10.51.23.65";
+                //textBox_IP.Text = "159.20.93.207";
 
             textBox_Port.Text = "3131";
 
@@ -448,8 +448,6 @@ namespace TicTacToeClient
 
 
 
-
-
         // XOX Buttons
         private void btn_00_Click(object sender, EventArgs e)
         {
@@ -497,5 +495,112 @@ namespace TicTacToeClient
         }
 
 
+
+
+        private void previewMove(Button clickedButton, bool isEnter)
+        {
+            if (isEnter)
+            {
+                clickedButton.Text = side.ToString();
+                clickedButton.ForeColor = Color.Crimson;
+            }
+            else
+            {
+                if (isYourTurn)
+                    clickedButton.Text = " ";
+                clickedButton.ForeColor = SystemColors.ControlText;
+            }
+        }
+
+        private void btn_00_MouseEnter(object sender, EventArgs e)
+        {
+            previewMove((Button)sender, true);
+        }
+
+        private void btn_00_MouseLeave(object sender, EventArgs e)
+        {
+            previewMove((Button)sender, false);
+        }
+
+        private void btn_01_MouseEnter(object sender, EventArgs e)
+        {
+            previewMove((Button)sender, true);
+        }
+
+        private void btn_01_MouseLeave(object sender, EventArgs e)
+        {
+            previewMove((Button)sender, false);
+        }
+
+        private void btn_02_MouseEnter(object sender, EventArgs e)
+        {
+            previewMove((Button)sender, true);
+        }
+
+        private void btn_02_MouseLeave(object sender, EventArgs e)
+        {
+            previewMove((Button)sender, false);
+        }
+
+        private void btn_10_MouseEnter(object sender, EventArgs e)
+        {
+            previewMove((Button)sender, true);
+        }
+
+        private void btn_10_MouseLeave(object sender, EventArgs e)
+        {
+            previewMove((Button)sender, false);
+        }
+
+        private void btn_11_MouseEnter(object sender, EventArgs e)
+        {
+            previewMove((Button)sender, true);
+        }
+
+        private void btn_11_MouseLeave(object sender, EventArgs e)
+        {
+            previewMove((Button)sender, false);
+        }
+
+        private void btn_12_MouseEnter(object sender, EventArgs e)
+        {
+            previewMove((Button)sender, true);
+        }
+
+        private void btn_12_MouseLeave(object sender, EventArgs e)
+        {
+            previewMove((Button)sender, false);
+        }
+
+        private void btn_20_MouseEnter(object sender, EventArgs e)
+        {
+            previewMove((Button)sender, true);
+        }
+
+        private void btn_20_MouseLeave(object sender, EventArgs e)
+        {
+            previewMove((Button)sender, false);
+        }
+
+        private void btn_21_MouseEnter(object sender, EventArgs e)
+        {
+            previewMove((Button)sender, true);
+        }
+
+        private void btn_21_MouseLeave(object sender, EventArgs e)
+        {
+            previewMove((Button)sender, false);
+        }
+
+        private void btn_22_MouseEnter(object sender, EventArgs e)
+        {
+            previewMove((Button)sender, true);
+        }
+
+        private void btn_22_MouseLeave(object sender, EventArgs e)
+        {
+            previewMove((Button)sender, false);
+        }
+    
     }
 }

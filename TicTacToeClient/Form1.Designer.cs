@@ -208,6 +208,8 @@
             btn_00.TabIndex = 14;
             btn_00.UseVisualStyleBackColor = false;
             btn_00.Click += btn_00_Click;
+            btn_00.MouseEnter += btn_00_MouseEnter;
+            btn_00.MouseLeave += btn_00_MouseLeave;
             // 
             // btn_01
             // 
@@ -221,6 +223,8 @@
             btn_01.TabIndex = 15;
             btn_01.UseVisualStyleBackColor = false;
             btn_01.Click += btn_01_Click;
+            btn_01.MouseEnter += btn_01_MouseEnter;
+            btn_01.MouseLeave += btn_01_MouseLeave;
             // 
             // btn_02
             // 
@@ -234,6 +238,8 @@
             btn_02.TabIndex = 16;
             btn_02.UseVisualStyleBackColor = false;
             btn_02.Click += btn_02_Click;
+            btn_02.MouseEnter += btn_02_MouseEnter;
+            btn_02.MouseLeave += btn_02_MouseLeave;
             // 
             // btn_10
             // 
@@ -247,6 +253,8 @@
             btn_10.TabIndex = 17;
             btn_10.UseVisualStyleBackColor = false;
             btn_10.Click += btn_10_Click;
+            btn_10.MouseEnter += btn_10_MouseEnter;
+            btn_10.MouseLeave += btn_10_MouseLeave;
             // 
             // btn_11
             // 
@@ -260,6 +268,8 @@
             btn_11.TabIndex = 18;
             btn_11.UseVisualStyleBackColor = false;
             btn_11.Click += btn_11_Click;
+            btn_11.MouseEnter += btn_11_MouseEnter;
+            btn_11.MouseLeave += btn_11_MouseLeave;
             // 
             // btn_12
             // 
@@ -273,6 +283,8 @@
             btn_12.TabIndex = 19;
             btn_12.UseVisualStyleBackColor = false;
             btn_12.Click += btn_12_Click;
+            btn_12.MouseEnter += btn_12_MouseEnter;
+            btn_12.MouseLeave += btn_12_MouseLeave;
             // 
             // btn_20
             // 
@@ -286,6 +298,8 @@
             btn_20.TabIndex = 20;
             btn_20.UseVisualStyleBackColor = false;
             btn_20.Click += btn_20_Click;
+            btn_20.MouseEnter += btn_20_MouseEnter;
+            btn_20.MouseLeave += btn_20_MouseLeave;
             // 
             // btn_21
             // 
@@ -299,6 +313,8 @@
             btn_21.TabIndex = 21;
             btn_21.UseVisualStyleBackColor = false;
             btn_21.Click += btn_21_Click;
+            btn_21.MouseEnter += btn_21_MouseEnter;
+            btn_21.MouseLeave += btn_21_MouseLeave;
             // 
             // btn_22
             // 
@@ -312,6 +328,8 @@
             btn_22.TabIndex = 22;
             btn_22.UseVisualStyleBackColor = false;
             btn_22.Click += btn_22_Click;
+            btn_22.MouseEnter += btn_22_MouseEnter;
+            btn_22.MouseLeave += btn_22_MouseLeave;
             // 
             // label_currentPlayer1
             // 
