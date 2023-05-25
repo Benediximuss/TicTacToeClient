@@ -40,7 +40,7 @@ namespace TicTacToeClient
             initButtonsMatrix();
             DisableBlueHighlight();
 
-            string ss = "ugur";
+            string ss = "meric";
             if (ss == "meric")
                 textBox_IP.Text = "10.51.18.6";
             else
@@ -264,6 +264,16 @@ namespace TicTacToeClient
                         else if (token[1] == "board")
                         {
                             updateGameBoard(token[2]);
+                        }
+                        else if (token[1] == "label")
+                        {
+                            setVersusLabels(token[2], token[3]);
+                        }
+                        else if (token[1] == "finish") { 
+                            toggleButtonsEnabled(false);
+                            toggleComponentsEnabled(true, btn_Queue);
+                            isYourTurn = false;
+                            //info win/lose = token[2] //username = token[3]
                         }
                     }
 
