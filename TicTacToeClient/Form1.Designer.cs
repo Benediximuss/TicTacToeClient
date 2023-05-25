@@ -199,7 +199,7 @@
             // btn_00
             // 
             btn_00.Enabled = false;
-            btn_00.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Regular, GraphicsUnit.Point);
+            btn_00.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Bold, GraphicsUnit.Point);
             btn_00.ForeColor = SystemColors.ControlText;
             btn_00.Location = new Point(363, 153);
             btn_00.Margin = new Padding(3, 4, 3, 4);
@@ -212,7 +212,7 @@
             // btn_01
             // 
             btn_01.Enabled = false;
-            btn_01.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Regular, GraphicsUnit.Point);
+            btn_01.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Bold, GraphicsUnit.Point);
             btn_01.ForeColor = SystemColors.ControlText;
             btn_01.Location = new Point(485, 153);
             btn_01.Margin = new Padding(3, 4, 3, 4);
@@ -225,7 +225,7 @@
             // btn_02
             // 
             btn_02.Enabled = false;
-            btn_02.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Regular, GraphicsUnit.Point);
+            btn_02.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Bold, GraphicsUnit.Point);
             btn_02.ForeColor = SystemColors.ControlText;
             btn_02.Location = new Point(606, 154);
             btn_02.Margin = new Padding(3, 4, 3, 4);
@@ -238,7 +238,7 @@
             // btn_10
             // 
             btn_10.Enabled = false;
-            btn_10.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Regular, GraphicsUnit.Point);
+            btn_10.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Bold, GraphicsUnit.Point);
             btn_10.ForeColor = SystemColors.ControlText;
             btn_10.Location = new Point(363, 281);
             btn_10.Margin = new Padding(3, 4, 3, 4);
@@ -251,7 +251,7 @@
             // btn_11
             // 
             btn_11.Enabled = false;
-            btn_11.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Regular, GraphicsUnit.Point);
+            btn_11.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Bold, GraphicsUnit.Point);
             btn_11.ForeColor = SystemColors.ControlText;
             btn_11.Location = new Point(485, 281);
             btn_11.Margin = new Padding(3, 4, 3, 4);
@@ -264,7 +264,7 @@
             // btn_12
             // 
             btn_12.Enabled = false;
-            btn_12.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Regular, GraphicsUnit.Point);
+            btn_12.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Bold, GraphicsUnit.Point);
             btn_12.ForeColor = SystemColors.ControlText;
             btn_12.Location = new Point(606, 281);
             btn_12.Margin = new Padding(3, 4, 3, 4);
@@ -277,7 +277,7 @@
             // btn_20
             // 
             btn_20.Enabled = false;
-            btn_20.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Regular, GraphicsUnit.Point);
+            btn_20.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Bold, GraphicsUnit.Point);
             btn_20.ForeColor = SystemColors.ControlText;
             btn_20.Location = new Point(363, 409);
             btn_20.Margin = new Padding(3, 4, 3, 4);
@@ -290,7 +290,7 @@
             // btn_21
             // 
             btn_21.Enabled = false;
-            btn_21.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Regular, GraphicsUnit.Point);
+            btn_21.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Bold, GraphicsUnit.Point);
             btn_21.ForeColor = SystemColors.ControlText;
             btn_21.Location = new Point(485, 409);
             btn_21.Margin = new Padding(3, 4, 3, 4);
@@ -303,7 +303,7 @@
             // btn_22
             // 
             btn_22.Enabled = false;
-            btn_22.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Regular, GraphicsUnit.Point);
+            btn_22.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Bold, GraphicsUnit.Point);
             btn_22.ForeColor = SystemColors.ControlText;
             btn_22.Location = new Point(606, 409);
             btn_22.Margin = new Padding(3, 4, 3, 4);

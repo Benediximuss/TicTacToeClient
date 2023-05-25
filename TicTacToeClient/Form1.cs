@@ -252,8 +252,6 @@ namespace TicTacToeClient
                         {
                             updateUnplayedButtons();
                         }
-
-
                     }
 
                     else if (token[0] == "update")
