@@ -320,7 +320,6 @@
             label_currentPlayer1.Name = "label_currentPlayer1";
             label_currentPlayer1.Size = new Size(114, 20);
             label_currentPlayer1.TabIndex = 23;
-            label_currentPlayer1.Text = "Ugur";
             label_currentPlayer1.TextAlign = ContentAlignment.TopCenter;
             // 
             // label_currentPlayer2
@@ -331,7 +330,6 @@
             label_currentPlayer2.RightToLeft = RightToLeft.No;
             label_currentPlayer2.Size = new Size(114, 21);
             label_currentPlayer2.TabIndex = 24;
-            label_currentPlayer2.Text = "Meric";
             label_currentPlayer2.TextAlign = ContentAlignment.TopCenter;
             // 
             // label_CurrentGame
