@@ -36,9 +36,17 @@ namespace TicTacToeClient
             initButtonsMatrix();
             DisableBlueHighlight();
 
-            username = "ugurpasa";
-            side = 'X';
             toggleButtonsEnabled(true);
+
+            string ss = "meric";
+            if (ss == "meric")
+                textBox_IP.Text = "10.51.18.6";
+            else
+                textBox_IP.Text = "159.20.93.207";
+            textBox_Port.Text = "3131";
+
+            textBox_Name.Text = "zort";
+
         }
 
 
@@ -126,6 +134,7 @@ namespace TicTacToeClient
             {
                 clientSocket.Send(buffer_send);
                 richTextBox_Log.AppendText("You've sent request!\n");
+                toggleComponentsEnabled(false, btn_Queue);
             }
             catch
             {
@@ -133,9 +142,29 @@ namespace TicTacToeClient
             }
         }
 
+        private void btn_Accept_Click(object sender, EventArgs e)
+        {
+            string msg = $"accept:{username}:{side}";
+            richTextBox_Log.AppendText(msg + '\n');
+            Byte[] buffer_send = Encoding.Default.GetBytes(msg);
+
+            try
+            {
+                clientSocket.Send(buffer_send);
+                richTextBox_Log.AppendText("You've accept the game!\n");
+                toggleComponentsEnabled(false, btn_Accept);
+                setInfoText("accepted", side.ToString());
+            }
+            catch
+            {
+                richTextBox_Log.AppendText("Coouldn't accept, try again!\n");
+            }
+        }
+
         private void btn_clearLog_Click(object sender, EventArgs e)
         {
             richTextBox_Log.Clear();
+            richTextBox_Log.AppendText(username + '\n');
         }
 
         // Connection
@@ -148,6 +177,9 @@ namespace TicTacToeClient
             {
                 clientSocket.Send(buffer_send);
                 richTextBox_Log.AppendText("You've left the room!\n");
+                username = string.Empty;
+                side = '\0';
+
             }
             catch
             {
@@ -200,7 +232,8 @@ namespace TicTacToeClient
                     {
                         richTextBox_Log.AppendText(token[2]);
                         toggleComponentsEnabled(true, btn_Accept);
-                        setInfoText("gamefound");
+                        setInfoText("gamefound", token[1]);
+                        side = token[1][0];
                     }
 
 
@@ -256,18 +289,20 @@ namespace TicTacToeClient
             }
         }
 
-        private void setInfoText(string state)
+        private void setInfoText(params string[] components)
         {
-            if (state == "init")
+            if (components[0] == "init")
                 label_Notification.Text = "Enter an IP address and a Port Number to connect a server!";
-            else if (state == "connected")
+            else if (components[0] == "connected")
                 label_Notification.Text = "Enter a username to join the game room!";
-            else if (state == "joined")
+            else if (components[0] == "joined")
                 label_Notification.Text = "Join the game queue to play a game!";
-            else if (state == "waiting")
+            else if (components[0] == "waiting")
                 label_Notification.Text = "Waiting for response...";
-            else if (state == "gamefound")
-                label_Notification.Text = $"Found game!\nAccept to start playing as {side}";
+            else if (components[0] == "gamefound")
+                label_Notification.Text = $"Found game!\nAccept for start playing as {components[1]}!";
+            else if (components[0] == "accepted")
+                label_Notification.Text = $"You are playing as {components[1]}";
 
         }
 
@@ -377,5 +412,6 @@ namespace TicTacToeClient
             buttonPlayed((Button)sender);
         }
 
+       
     }
 }

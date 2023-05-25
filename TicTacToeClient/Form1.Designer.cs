@@ -365,6 +365,7 @@
             btn_Accept.TabIndex = 27;
             btn_Accept.Text = "Accept Game";
             btn_Accept.UseVisualStyleBackColor = true;
+            btn_Accept.Click += btn_Accept_Click;
             // 
             // btn_clearLog
             // 
