@@ -42,18 +42,10 @@ namespace TicTacToeClient
             DisableBlueHighlight();
 
 
-            string ss = "ugur";
-            if (ss == "meric")
-                textBox_IP.Text = "10.51.18.6";
-            else
-                //textBox_IP.Text = "10.51.23.65"; // wifi
-                //textBox_IP.Text = "159.20.93.207"; // ethernet
-                textBox_IP.Text = "192.168.1.22"; // sevval 
-
+            textBox_IP.Text = "192.168.1.22"; // sevval 
             textBox_Port.Text = "3131";
 
-            textBox_Name.Text = "zort";
-
+            textBox_Name.Text = "ugurpasa";
         }
 
 
@@ -97,7 +89,6 @@ namespace TicTacToeClient
             if (string.IsNullOrWhiteSpace(username))
             {
                 AppendColoredText("Invalid username!\n", colors["Warnings"]);
-                //richTextBox_Log.AppendText("Invalid username!\n");
                 textBox_Name.Clear();
             }
             else
@@ -114,7 +105,6 @@ namespace TicTacToeClient
                 catch
                 {
                     AppendColoredText("Couldn't send message to the server, try again!\n", colors["Warnings"]);
-                    //richTextBox_Log.AppendText("Couldn't send message to the server, try again!\n");
                 }
             }
         }
@@ -152,12 +142,11 @@ namespace TicTacToeClient
                 clientSocket.Send(buffer_send);
                 toggleComponentsEnabled(false, btn_Queue);
                 setInfoText("inqueue");
-                clearAllButtons();
+                //clearAllButtons();
             }
             catch
             {
                 AppendColoredText("Couldn't send queue request, try again!\n", colors["Warnings"]);
-                //richTextBox_Log.AppendText("Coouldn't send queue request, try again!\n");
             }
         }
 
@@ -203,7 +192,7 @@ namespace TicTacToeClient
                 toggleButtonsEnabled(false);
                 setVersusLabels(" ", " ");
                 setInfoText("connected");
-
+                richTextBox_Leaderboard.Clear();
             }
             catch
             {
@@ -223,14 +212,12 @@ namespace TicTacToeClient
                     if (token[0] == "200") // Connected successfully
                     {
                         AppendColoredText("You have successfully connected to the server!\n", colors["Status"]);
-                        //richTextBox_Log.AppendText("You have successfully connected to the server!\n");
 
                         toggleComponentsEnabled(true, label_Name, textBox_Name, btn_Join, btn_Disconnect);
                     }
                     else if (token[0] == "400") // Server full
                     {
                         AppendColoredText("Couldn't connect to the server, it is full now!\n", colors["Warnings"]);
-                        //richTextBox_Log.AppendText("Couldn't connect to the server, it is full now!\n");
 
                         toggleComponentsEnabled(true, label_IP, label_Port, textBox_IP, textBox_Port, btn_Connect);
 
@@ -241,16 +228,16 @@ namespace TicTacToeClient
                     {
                         isJoined = true;
                         AppendColoredText(token[1], colors["Status"]);
-                        //richTextBox_Log.AppendText(token[1]);
 
-                        toggleComponentsEnabled(true, btn_Queue, btn_Disconnect);
+                        Thread tgllethread = new Thread(() => toggleComponentsEnabledDelay(400, true, btn_Queue, btn_Disconnect));
+                        tgllethread.Start();
+                        
                         setInfoText("joined");
                         btn_Disconnect.Text = "Leave";
                     }
                     else if (token[0] == "401") // Invalid username
                     {
                         AppendColoredText(token[1], colors["Warnings"]);
-                        //richTextBox_Log.AppendText(token[1]);
 
                         toggleComponentsEnabled(true, label_Name, textBox_Name, btn_Join, btn_Disconnect);
                         setInfoText("connected");
@@ -260,7 +247,6 @@ namespace TicTacToeClient
                     else if (token[0] == "startreq")
                     {
                         AppendColoredText(token[2], colors["Prompts"]);
-                        //richTextBox_Log.AppendText(token[2]);
                         toggleComponentsEnabled(true, btn_Accept);
                         setInfoText("gamefound", token[1]);
                         side = token[1][0];
@@ -306,6 +292,20 @@ namespace TicTacToeClient
                             }
 
                         }
+                        else if (token[1] == "left")
+                        {
+                            if (token[2] == "X")
+                                setVersusLabels("", label_currentPlayer2.Text);
+                            else if (token[2] == "O")
+                                setVersusLabels(label_currentPlayer2.Text, "");
+
+                            richTextBox_Log.AppendText(token[3]);
+                        }
+                        else if (token[1] == "leaderboard")
+                        {
+                            richTextBox_Leaderboard.Clear();
+                            richTextBox_Leaderboard.AppendText(token[2]);
+                        }
                         else if (token[1] == "vs")
                         {
                             toggleComponentsEnabled(true, label_currentPlayer1, label_currentPlayer2, label_CurrentGame);
@@ -333,7 +333,6 @@ namespace TicTacToeClient
                             }
                             else
                             {
-                                highlightWin();
                                 setInfoText("win/loss", token[2]);
                             }
                         }
@@ -344,10 +343,10 @@ namespace TicTacToeClient
                         richTextBox_Log.AppendText(token[1]);
                     }
                 }
-                catch
+                catch (Exception exc)
                 {
+                    AppendColoredText(exc.Message + '\n', colors["Warnings"]);
                     AppendColoredText("Lost connection with the server!\n", colors["Warnings"]);
-                    //richTextBox_Log.AppendText("Lost connection with the server!\n");
                     resetAll();
                 }
             }
@@ -355,13 +354,13 @@ namespace TicTacToeClient
 
         private string[] receiveResponse()
         {
-            Byte[] buffer = new Byte[128];
+            Byte[] buffer = new Byte[512];
             clientSocket.Receive(buffer);
             string response = Encoding.Default.GetString(buffer);
+
             string[] token = response.Trim('\0').Split(':');
             return token;
         }
-
 
         // Game functions
         private void makeMove(Button clickedButton)
@@ -372,10 +371,10 @@ namespace TicTacToeClient
 
             try
             {
-                clientSocket.Send(buffer_send);
                 isYourTurn = false;
                 updateUnplayedButtons();
                 setInfoText("nturn");
+                clientSocket.Send(buffer_send);
             }
             catch
             {
@@ -387,15 +386,18 @@ namespace TicTacToeClient
 
         private void updateGameBoard(string boardSerial)
         {
-            String[,] gameBoard = JsonConvert.DeserializeObject<String[,]>(boardSerial);
+            string[] boardsplt = boardSerial.Split(',');
 
-            for (int x = 0; x < 3; x++)
-            {
-                for (int y = 0; y < 3; y++)
-                {
-                    buttonsMatrix[x][y].Text = gameBoard[x, y];
-                }
-            }
+            buttonsMatrix[0][0].Text = boardsplt[0];
+            buttonsMatrix[0][1].Text = boardsplt[1];
+            buttonsMatrix[0][2].Text = boardsplt[2];
+            buttonsMatrix[1][0].Text = boardsplt[3];
+            buttonsMatrix[1][1].Text = boardsplt[4];
+            buttonsMatrix[1][2].Text = boardsplt[5];
+            buttonsMatrix[2][0].Text = boardsplt[6];
+            buttonsMatrix[2][1].Text = boardsplt[7];
+            buttonsMatrix[2][2].Text = boardsplt[8];
+           
         }
 
         private void updateUnplayedButtons()
@@ -409,14 +411,17 @@ namespace TicTacToeClient
             }
         }
 
-        /*        private void changeButton(string[] buttonCoords, char side, bool isEnabled = false)
-                {
-                    buttonsMatrix[int.Parse(buttonCoords[0])][int.Parse(buttonCoords[1])].Enabled = isEnabled;
-                    buttonsMatrix[int.Parse(buttonCoords[0])][int.Parse(buttonCoords[1])].Text = side.ToString();
-                }*/
-
 
         // Component Functions 
+
+        void toggleComponentsEnabledDelay(int delay, bool state, params Control[] components)
+        {
+            Thread.Sleep(delay);
+            foreach (Control component in components)
+            {
+                component.Enabled = state;
+            }
+        }
         void toggleComponentsEnabled(bool state, params Control[] components)
         {
             foreach (Control component in components)
@@ -469,7 +474,7 @@ namespace TicTacToeClient
             else if (components[0] == "turn")
                 label_Notification.Text = $"{components[1]} plays\nYour turn!";
             else if (components[0] == "nturn")
-                label_Notification.Text = $"{(side.ToString() == "X" ? "O" : "X")} plays!";
+                label_Notification.Text = $"{(side.ToString() == "X" ? "O" : "X")} plays\nWait...";
             else if (components[0] == "win/loss")
                 label_Notification.Text = $"You {components[1]}!";
             else if (components[0] == "draw")
@@ -540,48 +545,7 @@ namespace TicTacToeClient
         }
 
 
-        // XOX Buttons
-        private void btn_00_Click(object sender, EventArgs e)
-        {
-            makeMove((Button)sender);
-        }
-
-        private void btn_01_Click(object sender, EventArgs e)
-        {
-            makeMove((Button)sender);
-        }
-
-        private void btn_02_Click(object sender, EventArgs e)
-        {
-            makeMove((Button)sender);
-        }
-
-        private void btn_10_Click(object sender, EventArgs e)
-        {
-            makeMove((Button)sender);
-        }
-
-        private void btn_11_Click(object sender, EventArgs e)
-        {
-            makeMove((Button)sender);
-        }
-
-        private void btn_12_Click(object sender, EventArgs e)
-        {
-            makeMove((Button)sender);
-        }
-
-        private void btn_20_Click(object sender, EventArgs e)
-        {
-            makeMove((Button)sender);
-        }
-
-        private void btn_21_Click(object sender, EventArgs e)
-        {
-            makeMove((Button)sender);
-        }
-
-        private void btn_22_Click(object sender, EventArgs e)
+        private void gameButtonClicked(object sender, EventArgs e)
         {
             makeMove((Button)sender);
         }
@@ -647,6 +611,7 @@ namespace TicTacToeClient
 
         private void highlightWin()
         {
+
             for (int i = 0; i < 3; i++)
             {
                 if (buttonsMatrix[i][0].Text != " " && buttonsMatrix[i][0].Text == buttonsMatrix[i][1].Text && buttonsMatrix[i][0].Text == buttonsMatrix[i][2].Text)
@@ -674,11 +639,11 @@ namespace TicTacToeClient
 
             if (buttonsMatrix[0][2].Text != " " && buttonsMatrix[0][2].Text == buttonsMatrix[1][1].Text && buttonsMatrix[0][2].Text == buttonsMatrix[2][0].Text)
             {
-                buttonsMatrix[0][2].ForeColor = Color.Pink;
-                buttonsMatrix[1][1].ForeColor = Color.Pink;
-                buttonsMatrix[2][0].ForeColor = Color.Pink;
+                buttonsMatrix[0][2].BackColor = Color.Pink;
+                buttonsMatrix[1][1].BackColor = Color.Pink;
+                buttonsMatrix[2][0].BackColor = Color.Pink;
             }
-            
+
         }
 
         // Preview Move
@@ -697,96 +662,15 @@ namespace TicTacToeClient
             }
         }
 
-        private void btn_00_MouseEnter(object sender, EventArgs e)
+        private void btn_MouseEnter(object sender, EventArgs e)
         {
             previewMove((Button)sender, true);
         }
 
-        private void btn_00_MouseLeave(object sender, EventArgs e)
+        private void btn_MouseLeave(object sender, EventArgs e)
         {
             previewMove((Button)sender, false);
         }
-
-        private void btn_01_MouseEnter(object sender, EventArgs e)
-        {
-            previewMove((Button)sender, true);
-        }
-
-        private void btn_01_MouseLeave(object sender, EventArgs e)
-        {
-            previewMove((Button)sender, false);
-        }
-
-        private void btn_02_MouseEnter(object sender, EventArgs e)
-        {
-            previewMove((Button)sender, true);
-        }
-
-        private void btn_02_MouseLeave(object sender, EventArgs e)
-        {
-            previewMove((Button)sender, false);
-        }
-
-        private void btn_10_MouseEnter(object sender, EventArgs e)
-        {
-            previewMove((Button)sender, true);
-        }
-
-        private void btn_10_MouseLeave(object sender, EventArgs e)
-        {
-            previewMove((Button)sender, false);
-        }
-
-        private void btn_11_MouseEnter(object sender, EventArgs e)
-        {
-            previewMove((Button)sender, true);
-        }
-
-        private void btn_11_MouseLeave(object sender, EventArgs e)
-        {
-            previewMove((Button)sender, false);
-        }
-
-        private void btn_12_MouseEnter(object sender, EventArgs e)
-        {
-            previewMove((Button)sender, true);
-        }
-
-        private void btn_12_MouseLeave(object sender, EventArgs e)
-        {
-            previewMove((Button)sender, false);
-        }
-
-        private void btn_20_MouseEnter(object sender, EventArgs e)
-        {
-            previewMove((Button)sender, true);
-        }
-
-        private void btn_20_MouseLeave(object sender, EventArgs e)
-        {
-            previewMove((Button)sender, false);
-        }
-
-        private void btn_21_MouseEnter(object sender, EventArgs e)
-        {
-            previewMove((Button)sender, true);
-        }
-
-        private void btn_21_MouseLeave(object sender, EventArgs e)
-        {
-            previewMove((Button)sender, false);
-        }
-
-        private void btn_22_MouseEnter(object sender, EventArgs e)
-        {
-            previewMove((Button)sender, true);
-        }
-
-        private void btn_22_MouseLeave(object sender, EventArgs e)
-        {
-            previewMove((Button)sender, false);
-        }
-
 
         private void toggleButtonColor(object sender, EventArgs e)
         {
