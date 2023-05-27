@@ -129,6 +129,7 @@
             richTextBox_Log.Size = new Size(326, 275);
             richTextBox_Log.TabIndex = 7;
             richTextBox_Log.Text = "";
+            richTextBox_Log.TextChanged += richTextBox_Log_TextChanged;
             // 
             // dataGridView_Leaderboard
             // 
@@ -189,6 +190,8 @@
             // 
             // label_Notification
             // 
+            label_Notification.BorderStyle = BorderStyle.Fixed3D;
+            label_Notification.Font = new Font("Trebuchet MS", 9F, FontStyle.Regular, GraphicsUnit.Point);
             label_Notification.Location = new Point(11, 180);
             label_Notification.Name = "label_Notification";
             label_Notification.Size = new Size(326, 64);
@@ -198,6 +201,7 @@
             // 
             // btn_00
             // 
+            btn_00.BackColor = SystemColors.ScrollBar;
             btn_00.Enabled = false;
             btn_00.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Bold, GraphicsUnit.Point);
             btn_00.ForeColor = SystemColors.ControlText;
@@ -207,12 +211,14 @@
             btn_00.Size = new Size(114, 123);
             btn_00.TabIndex = 14;
             btn_00.UseVisualStyleBackColor = false;
+            btn_00.EnabledChanged += toggleButtonColor;
             btn_00.Click += btn_00_Click;
             btn_00.MouseEnter += btn_00_MouseEnter;
             btn_00.MouseLeave += btn_00_MouseLeave;
             // 
             // btn_01
             // 
+            btn_01.BackColor = SystemColors.ScrollBar;
             btn_01.Enabled = false;
             btn_01.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Bold, GraphicsUnit.Point);
             btn_01.ForeColor = SystemColors.ControlText;
@@ -222,12 +228,14 @@
             btn_01.Size = new Size(114, 123);
             btn_01.TabIndex = 15;
             btn_01.UseVisualStyleBackColor = false;
+            btn_01.EnabledChanged += toggleButtonColor;
             btn_01.Click += btn_01_Click;
             btn_01.MouseEnter += btn_01_MouseEnter;
             btn_01.MouseLeave += btn_01_MouseLeave;
             // 
             // btn_02
             // 
+            btn_02.BackColor = SystemColors.ScrollBar;
             btn_02.Enabled = false;
             btn_02.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Bold, GraphicsUnit.Point);
             btn_02.ForeColor = SystemColors.ControlText;
@@ -237,14 +245,16 @@
             btn_02.Size = new Size(114, 123);
             btn_02.TabIndex = 16;
             btn_02.UseVisualStyleBackColor = false;
+            btn_02.EnabledChanged += toggleButtonColor;
             btn_02.Click += btn_02_Click;
             btn_02.MouseEnter += btn_02_MouseEnter;
             btn_02.MouseLeave += btn_02_MouseLeave;
             // 
             // btn_10
             // 
+            btn_10.BackColor = SystemColors.ScrollBar;
             btn_10.Enabled = false;
-            btn_10.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Bold, GraphicsUnit.Point);
+            btn_10.Font = new Font("Microsoft Sans Serif", 27.5F, FontStyle.Bold, GraphicsUnit.Point);
             btn_10.ForeColor = SystemColors.ControlText;
             btn_10.Location = new Point(363, 281);
             btn_10.Margin = new Padding(3, 4, 3, 4);
@@ -252,12 +262,14 @@
             btn_10.Size = new Size(114, 123);
             btn_10.TabIndex = 17;
             btn_10.UseVisualStyleBackColor = false;
+            btn_10.EnabledChanged += toggleButtonColor;
             btn_10.Click += btn_10_Click;
             btn_10.MouseEnter += btn_10_MouseEnter;
             btn_10.MouseLeave += btn_10_MouseLeave;
             // 
             // btn_11
             // 
+            btn_11.BackColor = SystemColors.ScrollBar;
             btn_11.Enabled = false;
             btn_11.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Bold, GraphicsUnit.Point);
             btn_11.ForeColor = SystemColors.ControlText;
@@ -267,12 +279,14 @@
             btn_11.Size = new Size(114, 123);
             btn_11.TabIndex = 18;
             btn_11.UseVisualStyleBackColor = false;
+            btn_11.EnabledChanged += toggleButtonColor;
             btn_11.Click += btn_11_Click;
             btn_11.MouseEnter += btn_11_MouseEnter;
             btn_11.MouseLeave += btn_11_MouseLeave;
             // 
             // btn_12
             // 
+            btn_12.BackColor = SystemColors.ScrollBar;
             btn_12.Enabled = false;
             btn_12.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Bold, GraphicsUnit.Point);
             btn_12.ForeColor = SystemColors.ControlText;
@@ -282,12 +296,14 @@
             btn_12.Size = new Size(114, 123);
             btn_12.TabIndex = 19;
             btn_12.UseVisualStyleBackColor = false;
+            btn_12.EnabledChanged += toggleButtonColor;
             btn_12.Click += btn_12_Click;
             btn_12.MouseEnter += btn_12_MouseEnter;
             btn_12.MouseLeave += btn_12_MouseLeave;
             // 
             // btn_20
             // 
+            btn_20.BackColor = SystemColors.ScrollBar;
             btn_20.Enabled = false;
             btn_20.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Bold, GraphicsUnit.Point);
             btn_20.ForeColor = SystemColors.ControlText;
@@ -297,14 +313,16 @@
             btn_20.Size = new Size(114, 123);
             btn_20.TabIndex = 20;
             btn_20.UseVisualStyleBackColor = false;
+            btn_20.EnabledChanged += toggleButtonColor;
             btn_20.Click += btn_20_Click;
             btn_20.MouseEnter += btn_20_MouseEnter;
             btn_20.MouseLeave += btn_20_MouseLeave;
             // 
             // btn_21
             // 
+            btn_21.BackColor = SystemColors.ScrollBar;
             btn_21.Enabled = false;
-            btn_21.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Bold, GraphicsUnit.Point);
+            btn_21.Font = new Font("Microsoft Sans Serif", 28.2F, FontStyle.Bold, GraphicsUnit.Point);
             btn_21.ForeColor = SystemColors.ControlText;
             btn_21.Location = new Point(485, 409);
             btn_21.Margin = new Padding(3, 4, 3, 4);
@@ -312,12 +330,14 @@
             btn_21.Size = new Size(114, 123);
             btn_21.TabIndex = 21;
             btn_21.UseVisualStyleBackColor = false;
+            btn_21.EnabledChanged += toggleButtonColor;
             btn_21.Click += btn_21_Click;
             btn_21.MouseEnter += btn_21_MouseEnter;
             btn_21.MouseLeave += btn_21_MouseLeave;
             // 
             // btn_22
             // 
+            btn_22.BackColor = SystemColors.ScrollBar;
             btn_22.Enabled = false;
             btn_22.Font = new Font("Microsoft Sans Serif", 27.75F, FontStyle.Bold, GraphicsUnit.Point);
             btn_22.ForeColor = SystemColors.ControlText;
@@ -327,6 +347,7 @@
             btn_22.Size = new Size(114, 123);
             btn_22.TabIndex = 22;
             btn_22.UseVisualStyleBackColor = false;
+            btn_22.EnabledChanged += toggleButtonColor;
             btn_22.Click += btn_22_Click;
             btn_22.MouseEnter += btn_22_MouseEnter;
             btn_22.MouseLeave += btn_22_MouseLeave;
@@ -431,6 +452,7 @@
             MaximizeBox = false;
             Name = "Form1";
             Text = "TicTacToe Client";
+            FormClosing += Form1_FormClosing;
             ((System.ComponentModel.ISupportInitialize)dataGridView_Leaderboard).EndInit();
             ResumeLayout(false);
             PerformLayout();

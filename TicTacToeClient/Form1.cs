@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json.Serialization;
+using System.Windows.Forms;
 using System.Xml.Linq;
 using static System.Windows.Forms.AxHost;
 
@@ -15,23 +16,23 @@ namespace TicTacToeClient
 
         // Game information
         string username;
-        char side;
+        List<string> usernames = new List<string>();
 
         // Game logic
+        bool isJoined = false;
+        bool isYourTurn = false;
+        char side;
 
         // Network components comoon
         Socket clientSocket;
-        bool isJoined = false;
-        bool isYourTurn = false;
+
+        // Style components
 
         // Constructor
         public Form1()
         {
             /*To access UI elements in multi-thread level*/
             Control.CheckForIllegalCrossThreadCalls = false;
-
-            // For closing window
-            this.FormClosing += new FormClosingEventHandler(Form1_FormClosing);
 
             InitializeComponent();
 
@@ -40,19 +41,20 @@ namespace TicTacToeClient
             initButtonsMatrix();
             DisableBlueHighlight();
 
-            string ss = "meric";
+
+            string ss = "ugur";
             if (ss == "meric")
                 textBox_IP.Text = "10.51.18.6";
             else
-                textBox_IP.Text = "10.51.23.65";
-                //textBox_IP.Text = "159.20.93.207";
+                //textBox_IP.Text = "10.51.23.65"; // wifi
+                //textBox_IP.Text = "159.20.93.207"; // ethernet
+                textBox_IP.Text = "192.168.1.22"; // sevval 
 
             textBox_Port.Text = "3131";
 
             textBox_Name.Text = "zort";
 
         }
-
 
 
         // Buttons
@@ -76,12 +78,14 @@ namespace TicTacToeClient
                 }
                 catch (Exception exc)
                 {
-                    richTextBox_Log.AppendText("Couldn't connect to the server!\n");
+                    AppendColoredText("Couldn't connect to the server!\n", colors["Warnings"]);
+                    //richTextBox_Log.AppendText("Couldn't connect to the server!\n");
                 }
             }
             else
             {
-                richTextBox_Log.AppendText("Invalid port number, try again!\n");
+                AppendColoredText("Invalid port number, try again!\n", colors["Warnings"]);
+                //richTextBox_Log.AppendText("Invalid port number, try again!\n");
             }
 
         }
@@ -90,20 +94,29 @@ namespace TicTacToeClient
         {
             username = textBox_Name.Text;
 
-            Byte[] buffer_send = Encoding.Default.GetBytes("join:" + username);
-            try
+            if (string.IsNullOrWhiteSpace(username))
             {
-                clientSocket.Send(buffer_send); // Sending username for server to be checked
-
-                toggleComponentsEnabled(false, label_Name, textBox_Name, btn_Join, btn_Disconnect);
-
-                setInfoText("waiting");
+                AppendColoredText("Invalid username!\n", colors["Warnings"]);
+                //richTextBox_Log.AppendText("Invalid username!\n");
+                textBox_Name.Clear();
             }
-            catch
+            else
             {
-                richTextBox_Log.AppendText("Couldn't send message to the server, try again!\n");
-            }
+                Byte[] buffer_send = Encoding.Default.GetBytes("join:" + username);
+                try
+                {
+                    clientSocket.Send(buffer_send); // Sending username for server to be checked
 
+                    toggleComponentsEnabled(false, label_Name, textBox_Name, btn_Join, btn_Disconnect);
+
+                    setInfoText("waiting");
+                }
+                catch
+                {
+                    AppendColoredText("Couldn't send message to the server, try again!\n", colors["Warnings"]);
+                    //richTextBox_Log.AppendText("Couldn't send message to the server, try again!\n");
+                }
+            }
         }
 
         private void btn_Disconnect_Click(object sender, EventArgs e)
@@ -137,13 +150,14 @@ namespace TicTacToeClient
             try
             {
                 clientSocket.Send(buffer_send);
-                richTextBox_Log.AppendText("You've sent request!\n");
                 toggleComponentsEnabled(false, btn_Queue);
                 setInfoText("inqueue");
+                clearAllButtons();
             }
             catch
             {
-                richTextBox_Log.AppendText("Coouldn't send queue request, try again!\n");
+                AppendColoredText("Couldn't send queue request, try again!\n", colors["Warnings"]);
+                //richTextBox_Log.AppendText("Coouldn't send queue request, try again!\n");
             }
         }
 
@@ -155,20 +169,21 @@ namespace TicTacToeClient
             try
             {
                 clientSocket.Send(buffer_send);
-                richTextBox_Log.AppendText("You've accept the game!\n");
+                AppendColoredText("You've accept the game!\n", colors["Status"]);
+                //richTextBox_Log.AppendText("You've accept the game!\n");
                 toggleComponentsEnabled(false, btn_Accept);
                 setInfoText("accepted");
             }
             catch
             {
-                richTextBox_Log.AppendText("Couldn't accept, try again!\n");
+                AppendColoredText("Couldn't accept, try again!\n", colors["Warnings"]);
+                //richTextBox_Log.AppendText("Couldn't accept, try again!\n");
             }
         }
 
         private void btn_clearLog_Click(object sender, EventArgs e)
         {
             richTextBox_Log.Clear();
-            richTextBox_Log.AppendText(username + '\n');
         }
 
         // Connection
@@ -180,14 +195,20 @@ namespace TicTacToeClient
             try
             {
                 clientSocket.Send(buffer_send);
-                richTextBox_Log.AppendText("You've left the room!\n");
+                AppendColoredText("You've left the room!\n", colors["Status"]);
+                //richTextBox_Log.AppendText("You've left the room!\n");
                 username = string.Empty;
                 side = '\0';
+                clearAllButtons();
+                toggleButtonsEnabled(false);
+                setVersusLabels(" ", " ");
+                setInfoText("connected");
 
             }
             catch
             {
-                richTextBox_Log.AppendText("Coouldn't leave, try again!\n");
+                AppendColoredText("Couldn't leave, try again!\n", colors["Warnings"]);
+                //richTextBox_Log.AppendText("Couldn't leave, try again!\n");
             }
         }
 
@@ -201,13 +222,15 @@ namespace TicTacToeClient
 
                     if (token[0] == "200") // Connected successfully
                     {
-                        richTextBox_Log.AppendText("You have successfully connected to the server!\n");
+                        AppendColoredText("You have successfully connected to the server!\n", colors["Status"]);
+                        //richTextBox_Log.AppendText("You have successfully connected to the server!\n");
 
                         toggleComponentsEnabled(true, label_Name, textBox_Name, btn_Join, btn_Disconnect);
                     }
                     else if (token[0] == "400") // Server full
                     {
-                        richTextBox_Log.AppendText("Couldn't connect to the server, it is full now!\n");
+                        AppendColoredText("Couldn't connect to the server, it is full now!\n", colors["Warnings"]);
+                        //richTextBox_Log.AppendText("Couldn't connect to the server, it is full now!\n");
 
                         toggleComponentsEnabled(true, label_IP, label_Port, textBox_IP, textBox_Port, btn_Connect);
 
@@ -217,7 +240,8 @@ namespace TicTacToeClient
                     else if (token[0] == "201") // Username approved, joined successfully
                     {
                         isJoined = true;
-                        richTextBox_Log.AppendText(token[1]);
+                        AppendColoredText(token[1], colors["Status"]);
+                        //richTextBox_Log.AppendText(token[1]);
 
                         toggleComponentsEnabled(true, btn_Queue, btn_Disconnect);
                         setInfoText("joined");
@@ -225,7 +249,8 @@ namespace TicTacToeClient
                     }
                     else if (token[0] == "401") // Invalid username
                     {
-                        richTextBox_Log.AppendText("Please try another username!\n");
+                        AppendColoredText(token[1], colors["Warnings"]);
+                        //richTextBox_Log.AppendText(token[1]);
 
                         toggleComponentsEnabled(true, label_Name, textBox_Name, btn_Join, btn_Disconnect);
                         setInfoText("connected");
@@ -234,7 +259,8 @@ namespace TicTacToeClient
 
                     else if (token[0] == "startreq")
                     {
-                        richTextBox_Log.AppendText(token[2]);
+                        AppendColoredText(token[2], colors["Prompts"]);
+                        //richTextBox_Log.AppendText(token[2]);
                         toggleComponentsEnabled(true, btn_Accept);
                         setInfoText("gamefound", token[1]);
                         side = token[1][0];
@@ -242,7 +268,9 @@ namespace TicTacToeClient
                     else if (token[0] == "startplay")
                     {
                         toggleComponentsEnabled(false, btn_Accept);
+                        clearAllButtons();
                         setInfoText("gamestarts", side.ToString());
+                        setInfoText("nturn");
                     }
                     else if (token[0] == "yourturn")
                     {
@@ -251,29 +279,63 @@ namespace TicTacToeClient
                         if (isYourTurn)
                         {
                             updateUnplayedButtons();
+                            setInfoText("turn", token[1]);
                         }
                     }
 
                     else if (token[0] == "update")
                     {
-                        if (token[1] == "vs")
+                        if (token[1] == "newplayer")
                         {
-                            setVersusLabels(token[2], token[3]);
+                            if (token[2] != username)
+                                usernames.Add(token[2]);
+                            richTextBox_Log.AppendText($"{token[2]} has joined the game room!\n");
+                        }
+                        else if (token[1] == "currentplayers")
+                        {
+                            string[] nameslist = token[2].Trim('\0').Split(',');
+
+                            foreach (string name in nameslist)
+                            {
+                                if (!usernames.Contains(name) && name != username)
+                                {
+                                    usernames.Add(name);
+                                    richTextBox_Log.AppendText(name);
+                                    richTextBox_Log.AppendText(" is in the room\n");
+                                }
+                            }
+
+                        }
+                        else if (token[1] == "vs")
+                        {
                             toggleComponentsEnabled(true, label_currentPlayer1, label_currentPlayer2, label_CurrentGame);
+                            setVersusLabels(token[2], token[3]);
                         }
                         else if (token[1] == "board")
                         {
                             updateGameBoard(token[2]);
+                            highlightWin();
                         }
                         else if (token[1] == "label")
                         {
                             setVersusLabels(token[2], token[3]);
                         }
-                        else if (token[1] == "finish") { 
+                        else if (token[1] == "finish")
+                        {
                             toggleButtonsEnabled(false);
                             toggleComponentsEnabled(true, btn_Queue);
                             isYourTurn = false;
-                            //info win/lose = token[2] //username = token[3]
+
+
+                            if (token[2] == "draw")
+                            {
+                                setInfoText("draw");
+                            }
+                            else
+                            {
+                                highlightWin();
+                                setInfoText("win/loss", token[2]);
+                            }
                         }
                     }
 
@@ -284,7 +346,8 @@ namespace TicTacToeClient
                 }
                 catch
                 {
-                    richTextBox_Log.AppendText("Lost connection with the server!\n");
+                    AppendColoredText("Lost connection with the server!\n", colors["Warnings"]);
+                    //richTextBox_Log.AppendText("Lost connection with the server!\n");
                     resetAll();
                 }
             }
@@ -305,7 +368,6 @@ namespace TicTacToeClient
         {
             string coords = clickedButton.Name.Split('_')[1];
             string msg = $"move:{coords[0]}-{coords[1]}";
-            richTextBox_Log.AppendText(msg + "\n");
             Byte[] buffer_send = Encoding.Default.GetBytes(msg);
 
             try
@@ -313,10 +375,12 @@ namespace TicTacToeClient
                 clientSocket.Send(buffer_send);
                 isYourTurn = false;
                 updateUnplayedButtons();
+                setInfoText("nturn");
             }
             catch
             {
-                richTextBox_Log.AppendText("Couldn't play, try again!\n");
+                AppendColoredText("Couldn't play, try again!\n", colors["Warnings"]);
+                //richTextBox_Log.AppendText("Couldn't play, try again!\n");
             }
 
         }
@@ -372,6 +436,18 @@ namespace TicTacToeClient
             }
         }
 
+        private void clearAllButtons()
+        {
+            foreach (List<Button> row in buttonsMatrix)
+            {
+                foreach (Button button in row)
+                {
+                    button.Text = " ";
+                    button.BackColor = SystemColors.ScrollBar;
+                }
+            }
+        }
+
         private void setInfoText(params string[] components)
         {
             if (components[0] == "init")
@@ -390,6 +466,14 @@ namespace TicTacToeClient
                 label_Notification.Text = $"Wait for your opponent to accept!";
             else if (components[0] == "gamestarts")
                 label_Notification.Text = $"You are playing as {components[1]}!";
+            else if (components[0] == "turn")
+                label_Notification.Text = $"{components[1]} plays\nYour turn!";
+            else if (components[0] == "nturn")
+                label_Notification.Text = $"{(side.ToString() == "X" ? "O" : "X")} plays!";
+            else if (components[0] == "win/loss")
+                label_Notification.Text = $"You {components[1]}!";
+            else if (components[0] == "draw")
+                label_Notification.Text = "Draw!";
 
 
         }
@@ -404,6 +488,8 @@ namespace TicTacToeClient
         {
             toggleComponentsEnabled(true, label_IP, label_Port, textBox_IP, textBox_Port, btn_Connect);
             toggleComponentsEnabled(false, label_Name, textBox_Name, btn_Join, btn_Disconnect, btn_Queue, btn_Accept);
+            toggleButtonsEnabled(false);
+            clearAllButtons();
             setInfoText("init");
             isJoined = false;
             username = "";
@@ -442,10 +528,8 @@ namespace TicTacToeClient
             }
         }
 
-
-        private void Form1_FormClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-
             if (clientSocket != null && clientSocket.Connected)
             {
                 clientSocket.Close();
@@ -454,8 +538,6 @@ namespace TicTacToeClient
 
             Environment.Exit(0);
         }
-
-
 
 
         // XOX Buttons
@@ -504,9 +586,102 @@ namespace TicTacToeClient
             makeMove((Button)sender);
         }
 
+        // STYLE
 
+        Dictionary<String, Color> colors = new Dictionary<string, Color>
+        {
+            { "Warnings", Color.Red },
+            { "Status", Color.Gray },
+            { "Prompts", Color.Maroon },
+            { "Player", Color.DarkGreen },
+            { "OtherPlayers", Color.Blue },
+        };
 
+        private void AppendColoredText(string text, Color color)
+        {
+            richTextBox_Log.SelectionStart = richTextBox_Log.TextLength;
+            richTextBox_Log.SelectionLength = 0;
+            richTextBox_Log.SelectionColor = color;
+            richTextBox_Log.AppendText(text);
+            richTextBox_Log.SelectionColor = richTextBox_Log.ForeColor; // Reset to default color
+        }
+        // Highlight usernames
+        private void HighlightWordInRichTextBox(string word, Color color)
+        {
+            int startIndex = 0;
+            while (startIndex < richTextBox_Log.TextLength)
+            {
+                int wordStartIndex = richTextBox_Log.Find(word, startIndex, RichTextBoxFinds.None);
+                if (wordStartIndex == -1)
+                    break;
 
+                richTextBox_Log.SelectionStart = wordStartIndex;
+                richTextBox_Log.SelectionLength = word.Length;
+                richTextBox_Log.SelectionColor = color;
+
+                startIndex = wordStartIndex + word.Length;
+            }
+            richTextBox_Log.SelectionStart = richTextBox_Log.TextLength;
+            richTextBox_Log.SelectionLength = 0;
+        }
+
+        private void highlightUsernames()
+        {
+            if (isJoined)
+            {
+                HighlightWordInRichTextBox(username, colors["Player"]);
+
+                foreach (string name in usernames)
+                {
+                    HighlightWordInRichTextBox(name, colors["OtherPlayers"]);
+                }
+            }
+
+            // Promptlar marron olsun
+        }
+
+        private void richTextBox_Log_TextChanged(object sender, EventArgs e)
+        {
+            highlightUsernames();
+        }
+
+        private void highlightWin()
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                if (buttonsMatrix[i][0].Text != " " && buttonsMatrix[i][0].Text == buttonsMatrix[i][1].Text && buttonsMatrix[i][0].Text == buttonsMatrix[i][2].Text)
+                {
+                    buttonsMatrix[i][0].BackColor = Color.Pink;
+                    buttonsMatrix[i][1].BackColor = Color.Pink;
+                    buttonsMatrix[i][2].BackColor = Color.Pink;
+                }
+
+                if (buttonsMatrix[0][i].Text != " " && buttonsMatrix[0][i].Text == buttonsMatrix[1][i].Text && buttonsMatrix[0][i].Text == buttonsMatrix[2][i].Text)
+                {
+                    buttonsMatrix[0][i].BackColor = Color.Pink;
+                    buttonsMatrix[1][i].BackColor = Color.Pink;
+                    buttonsMatrix[2][i].BackColor = Color.Pink;
+                }
+            }
+
+            // Check diagonals
+            if (buttonsMatrix[0][0].Text != " " && buttonsMatrix[0][0].Text == buttonsMatrix[1][1].Text && buttonsMatrix[0][0].Text == buttonsMatrix[2][2].Text)
+            {
+                buttonsMatrix[0][0].BackColor = Color.Pink;
+                buttonsMatrix[1][1].BackColor = Color.Pink;
+                buttonsMatrix[2][2].BackColor = Color.Pink;
+            }
+
+            if (buttonsMatrix[0][2].Text != " " && buttonsMatrix[0][2].Text == buttonsMatrix[1][1].Text && buttonsMatrix[0][2].Text == buttonsMatrix[2][0].Text)
+            {
+                buttonsMatrix[0][2].ForeColor = Color.Pink;
+                buttonsMatrix[1][1].ForeColor = Color.Pink;
+                buttonsMatrix[2][0].ForeColor = Color.Pink;
+            }
+            
+        }
+
+        // Preview Move
         private void previewMove(Button clickedButton, bool isEnter)
         {
             if (isEnter)
@@ -611,6 +786,16 @@ namespace TicTacToeClient
         {
             previewMove((Button)sender, false);
         }
-    
+
+
+        private void toggleButtonColor(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+            if (btn.Enabled)
+                btn.BackColor = SystemColors.Control;
+            else
+                btn.BackColor = SystemColors.ScrollBar;
+        }
+
     }
 }
